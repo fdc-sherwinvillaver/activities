@@ -1,0 +1,20 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Activity page</title>
+	<script type="text/javascript" src="jquery/jquery.min.js"></script>
+</head>
+<body>
+	<h3>What is JavaScript?</h3>
+	<p id="p1">JavaScript is a full-fledged dynamic programming language that, when applied to an HTML document, can provide dynamic interactivity on websites.</p>
+	<h3>What is jQuery?</h3>
+	<p>jQuery is a fast, small, and feature-rich JavaScript library.</p>
+</body>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('h3').on('click',function(){
+			$('#p1').toggle('slow');
+		});
+	});
+</script>
+</html>
