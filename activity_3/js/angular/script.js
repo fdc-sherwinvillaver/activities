@@ -13,20 +13,75 @@ myApp.config(function($routeProvider){
 });
 
 myApp.controller('usersController',['$scope','$http','$filter', function($scope,$http,$filter) {
-	//get data from database
-	var newGender;
-	$scope.listUsers = function(){
-		$http.post('api/users_controller.php',{ action : "getUsers"})
+	//count users data from database
+	var count;
+	var datatype;
+	var increment = 1;
+	var check_decimal;
+	$scope.getUserCount = function(){
+		count = 0;
+		datatype;
+		increment = 0;
+		check_decimal;
+
+		$scope.pages = [];
+
+		$http.post('api/users_controller.php',{ action : "getUserCount"})
 			.then(function success(e){
-				$scope.users = e.data;
-				for(var i = 0; i < e.data.length; i++){
-					$scope.date_created = new Date(e.data[i].birthday);
+				count = e.data.count
+				datatype = e.data.datatype
+				if(datatype == "double"){
+					count = count/10;
+					check_decimal = parseInt(count.toString()[2]);
+					if(check_decimal < 5){
+						count = Math.round(count+1);
+					} else{
+						count = Math.round(count);
+					}
 				}
+				else{
+					count = count/10;
+				}
+				for(var i = 0; i < count; i++){
+					$scope.pages.push({
+						"page" : i + 1,
+						"increment" : increment
+					});
+					increment = increment + 10;
+				}
+
+				$scope.active = 1;
 			}, function error(e){
 
 			});
 	}
-	$scope.listUsers();
+	$scope.getUserCount();
+
+	
+
+	//end count data from database
+
+	//get data from database
+	var newGender;
+	$scope.listUsers = function(page,increment){
+		$scope.datas = [{
+			"offset" : increment
+		}];
+		$http.post('api/users_controller.php',{ action : "getUsers" , formData: $scope.datas})
+			.then(function success(e){
+				$scope.users = e.data;
+				// console.log(e);
+			}, function error(e){
+
+			});
+		$scope.active = page;
+	}
+	var array = [{
+		"page" : 1,
+		"increment" : 0
+	}];
+
+	$scope.listUsers(array[0].page,array[0].increment);
 	// end get data from database
 
 	//edit
@@ -54,7 +109,8 @@ myApp.controller('usersController',['$scope','$http','$filter', function($scope,
 		}];
 		$http.post('api/users_controller.php',{action : 'registerUser', formData : $scope.datas })
 			.then(function success(e){
-				$scope.listUsers();
+				$scope.listUsers(1,1);
+				$scope.getUserCount();
 			}, function error(e){
 
 			});
@@ -78,7 +134,8 @@ myApp.controller('usersController',['$scope','$http','$filter', function($scope,
 		}];
 		$http.post('api/users_controller.php',{action : 'updateUser', formData : $scope.datas })
 			.then(function success(e){
-				$scope.listUsers();
+				$scope.listUsers(1,1);
+				$scope.getUserCount();
 			}, function error(e){
 
 			});
@@ -98,7 +155,8 @@ myApp.controller('usersController',['$scope','$http','$filter', function($scope,
 		}];
 		$http.post('api/users_controller.php',{action : 'deleteUser', formData : $scope.datas })
 			.then(function success(e){
-				$scope.listUsers();
+				$scope.listUsers(1,1);
+				$scope.getUserCount();
 			}, function error(e){
 
 			});
@@ -111,6 +169,52 @@ myApp.controller('usersController',['$scope','$http','$filter', function($scope,
 
 
 myApp.controller('productsController',['$scope','$http','$filter', function($scope,$http,$filter) {
+	//get product count
+	var count;
+	var datatype;
+	var increment = 1;
+	var check_decimal;
+	$scope.getProductCount = function(){
+		count = 0;
+		datatype;
+		increment = 0;
+		check_decimal;
+		$scope.pages = [];
+		$http.post('api/products_controller.php',{ action : "getProductCount"})
+			.then(function success(e){
+				count = e.data.count
+				datatype = e.data.datatype
+				if(datatype == "double"){
+					count = count/10;
+					check_decimal = parseInt(count.toString()[2]);
+					if(check_decimal < 5){
+						count = Math.round(count+1);
+					} else{
+						count = Math.round(count);
+					}
+				}
+				else{
+					count = count/10;
+				}
+				for(var i = 0; i < count; i++){
+					$scope.pages.push({
+						"page" : i + 1,
+						"increment" : increment
+					});
+					increment = increment + 10;
+				}
+
+				$scope.active = 1;
+			}, function error(e){
+
+			});
+	}
+	$scope.getProductCount();
+	//end product count
+
+
+
+
 	var productid;
 	var product_id;
 	var x;
@@ -131,15 +235,25 @@ myApp.controller('productsController',['$scope','$http','$filter', function($sco
 	//end productid
 
 	//get_all products
-	$scope.listProducts = function(){
-		$http.post('api/products_controller.php',{ action : "getProducts"})
+	$scope.listProducts = function(page,increment){
+		$scope.datas = [{
+			"offset" : increment
+		}];
+		$http.post('api/products_controller.php',{ action : "getProducts" , formData: $scope.datas})
 			.then(function success(e){
 				$scope.products = e.data;
+				// console.log(e);
 			}, function error(e){
 
 			});
+		$scope.active = page;
 	}
-	$scope.listProducts();
+	var array = [{
+		"page" : 1,
+		"increment" : 0
+	}];
+
+	$scope.listProducts(array[0].page,array[0].increment);
 
 	//edit products
 	var index;
@@ -163,7 +277,8 @@ myApp.controller('productsController',['$scope','$http','$filter', function($sco
 		}];
 		$http.post('api/products_controller.php',{action : 'registerProduct', formData : $scope.datas })
 			.then(function success(e){
-				$scope.listProducts();
+				$scope.listProducts(1,1);
+				$scope.getProductCount();
 				$scope.getProductID();
 			}, function error(e){
 
@@ -186,7 +301,8 @@ myApp.controller('productsController',['$scope','$http','$filter', function($sco
 		}];
 		$http.post('api/products_controller.php',{action : 'updateProducts', formData : $scope.datas })
 			.then(function success(e){
-				$scope.listProducts();
+				$scope.listProducts(1,1);
+				$scope.getProductCount();
 				$scope.getProductID();
 			}, function error(e){
 
@@ -206,62 +322,14 @@ myApp.controller('productsController',['$scope','$http','$filter', function($sco
 		}];
 		$http.post('api/products_controller.php',{action : 'deleteProducts', formData : $scope.datas })
 			.then(function success(e){
-				$scope.listProducts();
+				$scope.listProducts(1,1);
+				$scope.getProductCount();
 				$scope.getProductID();
 			}, function error(e){
 
 			});
 	}
 	//end delete product
-
-	//end products
-	// var product_id = "PR-002";
-	// var index = 2;
-	// $scope.product_id = product_id;
-	// //register product on list
-	// $scope.registerProducts = function(){
-
-	// 	product_id = "PR-00" + index;
-	// 	//insert data on list
-	// 	$scope.datas.push({
-	// 		"product_id" : product_id,
-	// 		"product_name" : $scope.product_name,
-	// 		"product_type" : $scope.product_type,
-	// 		"product_description" : $scope.product_description,
-	// 	});
-	// 	$scope.product_name = "";
-	// 	$scope.product_type = "";
-	// 	$scope.product_description = "";
-	// 	index++;
-	// 	$scope.product_id = "PR-00" + index;
-	// }
-	// //update product on list
-	// $scope.updateProduct= function(){
-	// 	var number = $scope.number;
-	// 	$scope.datas[number].product_name = $scope.product_name;
-	// 	$scope.datas[number].product_type = $scope.product_type;
-	// 	$scope.datas[number].product_description = $scope.product_description;
-
-	// 	$scope.product_name = "";
-	// 	$scope.product_type = "";
-	// 	$scope.product_description = "";
-	// 	$scope.product_id = "PR-00" + index;
-	// }
-
-	// //remove data from list
-	// $scope.remove = function(item){
-	// 	var index = $scope.datas.indexOf(item);
-	// 	$scope.datas.splice(index,1);
-	// }
-
-	// $scope.edit = function(item){
-	// 	var indexs = $scope.datas.indexOf(item);
-	// 	$scope.number = indexs;
-	// 	$scope.product_id = item.product_id;
-	// 	$scope.product_name = item.product_name;
-	// 	$scope.product_type = item.product_type;
-	// 	$scope.product_description = item.product_description;
-	// }
 	$scope.first = false;
 	$scope.toggle = function(){
 		$scope.first = true;

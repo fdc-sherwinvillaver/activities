@@ -82,6 +82,11 @@
         </tbody>
       </table>
     </div>
+    <div class="pull-right">
+      <span ng-repeat="page in pages">
+        <button class="btn" ng-class="{ 'btn-primary' : active == page.page }" ng-click="listProducts(page.page,page.increment)">{{ page.page }}</button>
+      </span>
+    </div>
   </div>
   <div class="card-footer small text-muted">
     Updated yesterday at 11:59 PM

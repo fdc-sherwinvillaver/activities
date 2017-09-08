@@ -87,11 +87,16 @@
               <td>{{ user.middle_name }}</td>
               <td ng-if="user.gender == 1">Male</td>
               <td ng-if="user.gender == 2">Female</td>
-              <td>{{ date_created | date : 'MM/dd/yyyy' }}</td>
+              <td>{{ user.birthday }}</td>
               <td><button class="btn btn-success" ng-click="edit(user); toggle();">Edit</button> <button class="btn btn-danger" ng-click="remove(user)">Remove</button></td>
             </tr>
         </tbody>
       </table>
+    </div>
+    <div class="pull-right">
+      <span ng-repeat="page in pages">
+        <button class="btn" ng-class="{ 'btn-primary' : active == page.page }" ng-click="listUsers(page.page,page.increment)">{{ page.page }}</button>
+      </span>
     </div>
   </div>
   <div class="card-footer small text-muted">

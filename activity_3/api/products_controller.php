@@ -1,6 +1,6 @@
 <?php  
-	include 'connection.php';
-	include('products.php');
+	include 'model/connection.php';
+	include('model/products.php');
 
 	$pdo = Database::connect();
  	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -11,7 +11,8 @@
 	
 	switch ($action) {
 		case 'getProducts':
-			Products::selectAllData($pdo);
+			$formData = $data->formData;
+			Products::selectAllData($pdo,$formData[0]);
 			break;
 		case 'getProductid':
 			Products::countAllData($pdo);
@@ -27,6 +28,9 @@
 		case 'deleteProducts':
 			$formData = $data->formData;
 			Products::deleteProducts($pdo,$formData[0]);
+			break;
+		case 'getProductCount':
+			Products::getProductCount($pdo);
 			break;
 		default:
 			# code...

@@ -1,6 +1,6 @@
 <?php  
-	include 'connection.php';
-	include('users.php');
+	include 'model/connection.php';
+	include('model/users.php');
 
 	$pdo = Database::connect();
  	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -11,7 +11,8 @@
 	
 	switch ($action) {
 		case 'getUsers':
-			Users::selectAllData($pdo);
+			$formData = $data->formData;
+			Users::selectAllData($pdo,$formData[0]);
 			break;
 		case 'registerUser':
 			$formData = $data->formData;
@@ -24,6 +25,9 @@
 		case 'deleteUser':
 			$formData = $data->formData;
 			Users::deleteUser($pdo,$formData[0]);
+			break;
+		case 'getUserCount':
+			Users::getUserCount($pdo);
 			break;
 		default:
 			# code...
