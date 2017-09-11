@@ -1,0 +1,105 @@
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#">Dashboard</a>
+  </li>
+  <li class="breadcrumb-item active">Users</li>
+</ol>
+<h1>Users</h1>
+<div class="card card-register mt-3">
+  <div class="card-header">
+    Register an Account
+  </div>
+  <div class="card-body">
+  	<form name="frmUsers">
+      <div class="form-group">
+        <div class="form-row">
+          <div class="col-md-6">
+            <input type="text" class="form-control" ng-model="number" hidden>
+            <label for="exampleInputName">First name</label>
+            <input type="text" class="form-control" id="exampleInputName" aria-describedby="nameHelp" ng-model="first_name" placeholder="Enter first name">
+          </div>
+          <div class="col-md-6">
+            <label for="exampleInputLastName">Last name</label>
+            <input type="text" class="form-control" id="exampleInputLastName" aria-describedby="nameHelp" ng-model="last_name" placeholder="Enter last name">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-row">
+          <div class="col-md-6">
+            <label for="exampleInputName">Middle name</label>
+            <input type="text" class="form-control" id="exampleInputName" aria-describedby="nameHelp" ng-model="middle_name" placeholder="Enter middle name">
+          </div>
+          <div class="col-md-6">
+            <label for="exampleInputLastName">Gender</label>
+            <select class="form-control" id="gender" ng-model="gender">
+			        <option value="1">Male</option>
+			        <option value="2">Female</option>
+			      </select>
+          </div>
+        </div>
+      </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Birthday</label>
+          <input type="date" class="form-control" ng-model="date" id="date">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" ng-hide="first" ng-click="registerUser()">Register</button>
+        <button type="submit" class="btn btn-primary btn-block" ng-hide="!first" ng-click="updateUser(); toggle();">Update</button>
+  	</form>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fa fa-table"></i>
+    All Users
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="display table table-bordered users" width="100%" id="dataTable" cellspacing="0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Middlename</th>
+            <th>Gender</th>
+            <th>Birthday</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th>ID</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Middlename</th>
+            <th>Gender</th>
+            <th>Birthday</th>
+            <th>Action</th>
+          </tr>
+        </tfoot>
+        <tbody>
+            <tr ng-repeat="user in users">
+              <td>{{ user.id }}</td>
+              <td>{{ user.first_name }}</td>
+              <td>{{ user.last_name }}</td>
+              <td>{{ user.middle_name }}</td>
+              <td ng-if="user.gender == 1">Male</td>
+              <td ng-if="user.gender == 2">Female</td>
+              <td>{{ user.birthday }}</td>
+              <td><button class="btn btn-success" ng-click="edit(user); toggle();">Edit</button> <button class="btn btn-danger" ng-click="remove(user)">Remove</button></td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pull-right">
+      <span ng-repeat="page in pages">
+        <button class="btn" ng-class="{ 'btn-primary' : active == page.page }" ng-click="listUsers(page.page,page.increment)">{{ page.page }}</button>
+      </span>
+    </div>
+  </div>
+  <div class="card-footer small text-muted">
+    Updated yesterday at 11:59 PM
+  </div>
+</div>
